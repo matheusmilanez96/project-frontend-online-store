@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import './App.css';
 import ProductList from './pages/ProductList';
 import Cart from './pages/Cart';
+import ProductDetail from './pages/ProductDetail';
 
 class App extends React.Component {
   render() {
@@ -18,6 +19,11 @@ class App extends React.Component {
             exact
             path="/"
             component={ ProductList }
+          />
+          <Route
+            exact
+            path="/productDetail:id"
+            component={ ProductDetail }
           />
         </Switch>
       </div>
