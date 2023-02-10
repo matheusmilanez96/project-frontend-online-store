@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { getCategories } from '../services/api';
 
 class ProductList extends React.Component {
@@ -25,6 +26,7 @@ class ProductList extends React.Component {
         >
           Digite algum termo de pesquisa ou escolha uma categoria.
         </p>
+        <Link data-testid="shopping-cart-button" to="/cart" />
         <ul>
           { categoriesList.map((cat) => (
             <button data-testid="category" key={ cat.id }>{ cat.name }</button>
