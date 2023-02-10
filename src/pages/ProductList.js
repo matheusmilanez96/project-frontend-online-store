@@ -24,9 +24,17 @@ class ProductList extends React.Component {
     });
   };
 
-  getCategoryAndQuery = async () => {
+  getQuery = async () => {
     const { searchInput } = this.state;
     const productsArray = await getProductsFromCategoryAndQuery(undefined, searchInput);
+    // console.log(productsArray);
+    this.setState({
+      productList: productsArray.results,
+    });
+  };
+
+  getCategory = async (id) => {
+    const productsArray = await getProductsFromCategoryAndQuery(id, undefined);
     // console.log(productsArray);
     this.setState({
       productList: productsArray.results,
@@ -50,7 +58,13 @@ class ProductList extends React.Component {
         <Link data-testid="shopping-cart-button" to="/cart" />
         <ul>
           { categoriesList.map((cat) => (
-            <button data-testid="category" key={ cat.id }>{ cat.name }</button>
+            <button
+              onClick={ () => this.getCategory(cat.id) }
+              data-testid="category"
+              key={ cat.id }
+            >
+              { cat.name }
+            </button>
           ))}
         </ul>
         <input
@@ -62,7 +76,7 @@ class ProductList extends React.Component {
         />
 
         <button
-          onClick={ this.getCategoryAndQuery }
+          onClick={ this.getQuery }
           type="button"
           data-testid="query-button"
         >
