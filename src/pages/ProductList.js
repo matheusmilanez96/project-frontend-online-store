@@ -7,18 +7,17 @@ class ProductList extends React.Component {
     categoriesList: [],
     searchInput: '',
     productList: [],
+    shoppingCart: [],
   };
 
   async componentDidMount() {
     const categories = await getCategories();
-    // console.log(categories);
     this.setState({
       categoriesList: categories,
     });
   }
 
   handleChange = ({ target: { name, value } }) => {
-    // value = target.type === 'checkbox' ? target.checked : value;
     this.setState({
       [name]: value,
     });
@@ -27,7 +26,6 @@ class ProductList extends React.Component {
   getQuery = async () => {
     const { searchInput } = this.state;
     const productsArray = await getProductsFromCategoryAndQuery(undefined, searchInput);
-    // console.log(productsArray);
     this.setState({
       productList: productsArray.results,
     });
@@ -35,10 +33,36 @@ class ProductList extends React.Component {
 
   getCategory = async (id) => {
     const productsArray = await getProductsFromCategoryAndQuery(id, undefined);
-    // console.log(productsArray);
     this.setState({
       productList: productsArray.results,
     });
+  };
+
+  addToCart = (product) => {
+    const { shoppingCart } = this.state;
+    const foundIndex = shoppingCart.findIndex((element) => element.id === product.id);
+    if (foundIndex >= 0) {
+      shoppingCart[foundIndex].quantity += 1;
+      this.setState({
+        shoppingCart,
+      });
+      const cartString = JSON.stringify(shoppingCart);
+      localStorage.setItem('shopping-cart', cartString);
+    } else {
+      const { title, price, id } = product;
+      const produto = {
+        title,
+        price,
+        id,
+        quantity: 1,
+      };
+      const newCart = [...shoppingCart, produto];
+      this.setState({
+        shoppingCart: newCart,
+      });
+      const cartString = JSON.stringify(newCart);
+      localStorage.setItem('shopping-cart', cartString);
+    }
   };
 
   render() {
@@ -47,7 +71,6 @@ class ProductList extends React.Component {
       searchInput,
       productList,
     } = this.state;
-    // console.log(productList);
     return (
       <div>
         <p
@@ -55,7 +78,9 @@ class ProductList extends React.Component {
         >
           Digite algum termo de pesquisa ou escolha uma categoria.
         </p>
-        <Link data-testid="shopping-cart-button" to="/cart" />
+        <Link data-testid="shopping-cart-button" to="/cart">
+          Carrinho
+        </Link>
         <ul>
           { categoriesList.map((cat) => (
             <button
@@ -90,6 +115,12 @@ class ProductList extends React.Component {
                   <p>{ product.title }</p>
                   <img src={ product.thumbnail } alt={ product.title } />
                   <p>{ product.price }</p>
+                  <button
+                    data-testid="product-add-to-cart"
+                    onClick={ () => this.addToCart(product) }
+                  >
+                    Adicionar ao Carrinho
+                  </button>
                 </div>
               ))
             )
