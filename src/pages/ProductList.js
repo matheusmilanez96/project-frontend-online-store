@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
 
 class ProductList extends React.Component {
@@ -47,7 +47,7 @@ class ProductList extends React.Component {
       searchInput,
       productList,
     } = this.state;
-    // console.log(productList);
+    console.log(productList);
     return (
       <div>
         <p
@@ -86,11 +86,18 @@ class ProductList extends React.Component {
           {
             productList.length === 0 ? <p>Nenhum produto foi encontrado</p> : (
               productList.map((product) => (
-                <div data-testid="product" key={ product.id }>
-                  <p>{ product.title }</p>
-                  <img src={ product.thumbnail } alt={ product.title } />
-                  <p>{ product.price }</p>
-                </div>
+                <NavLink
+                  data-testid="product-detail-link"
+                  to={ `/productDetail${product.id}` }
+                  key={ product.id }
+                >
+                  <div data-testid="product">
+                    <p>{ product.title }</p>
+                    <img src={ product.thumbnail } alt={ product.title } />
+                    <p>{ product.price }</p>
+                  </div>
+                </NavLink>
+
               ))
             )
           }
