@@ -112,16 +112,17 @@ class ProductList extends React.Component {
           {
             productList.length === 0 ? <p>Nenhum produto foi encontrado</p> : (
               productList.map((product) => (
-
-                <NavLink
-                  data-testid="product-detail-link"
-                  to={ `/productDetail${product.id}` }
-                  key={ product.id }
-                >
-                  <div data-testid="product" key={ product.id }>
-                  <p>{ product.title }</p>
-                  <img src={ product.thumbnail } alt={ product.title } />
-                  <p>{ product.price }</p>
+                <div key={ product.id }>
+                  <NavLink
+                    data-testid="product-detail-link"
+                    to={ `/productDetail${product.id}` }
+                  >
+                    <div data-testid="product">
+                      <p>{ product.title }</p>
+                      <img src={ product.thumbnail } alt={ product.title } />
+                      <p>{ product.price }</p>
+                    </div>
+                  </NavLink>
                   <button
                     data-testid="product-add-to-cart"
                     onClick={ () => this.addToCart(product) }
@@ -129,7 +130,6 @@ class ProductList extends React.Component {
                     Adicionar ao Carrinho
                   </button>
                 </div>
-                </NavLink>
               ))
             )
           }
