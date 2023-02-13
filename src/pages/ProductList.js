@@ -15,6 +15,15 @@ class ProductList extends React.Component {
     this.setState({
       categoriesList: categories,
     });
+    const shoppingString = 'shopping-cart';
+    const parsedCart = JSON.parse(localStorage.getItem(shoppingString));
+    if (parsedCart) {
+      this.setState({
+        shoppingCart: parsedCart,
+      });
+      const cartString = JSON.stringify(parsedCart);
+      localStorage.setItem(shoppingString, cartString);
+    }
   }
 
   handleChange = ({ target: { name, value } }) => {
@@ -40,6 +49,7 @@ class ProductList extends React.Component {
 
   addToCart = (product) => {
     const { shoppingCart } = this.state;
+    const shoppingString = 'shopping-cart';
     const foundIndex = shoppingCart.findIndex((element) => element.id === product.id);
     if (foundIndex >= 0) {
       shoppingCart[foundIndex].quantity += 1;
@@ -47,7 +57,7 @@ class ProductList extends React.Component {
         shoppingCart,
       });
       const cartString = JSON.stringify(shoppingCart);
-      localStorage.setItem('shopping-cart', cartString);
+      localStorage.setItem(shoppingString, cartString);
     } else {
       const { title, price, id } = product;
       const produto = {
@@ -61,7 +71,7 @@ class ProductList extends React.Component {
         shoppingCart: newCart,
       });
       const cartString = JSON.stringify(newCart);
-      localStorage.setItem('shopping-cart', cartString);
+      localStorage.setItem(shoppingString, cartString);
     }
   };
 
